@@ -8,8 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 # importing our created form which is inherited from usercreationform to add email field
-from .forms import UserRegisterForm
-
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 def register(request):
     if request.method == 'POST':
@@ -27,4 +26,28 @@ def register(request):
 
 @login_required
 def profile(request):
-    return render(request,"users/profile.html")
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance = request.user)  #<-we are giving instance of current working user by providing
+        # request.user in to our UserForm
+        p_form = ProfileUpdateForm(request.POST,
+                                   request.FILES,
+                                   instance=request.user.profile)#<-we are giving profile instance of current working user
+        # by providing  request.user.profile in to our ProfileUpdateForm
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f'Your profile is updated!!')
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)  # <-we are giving instance of current working user by providing
+        # request.user in to our UserForm
+        p_form = ProfileUpdateForm(
+            instance=request.user.profile)  # <-we are giving profile instance of current working user
+        # by providing  request.user.profile in to our ProfileUpdateForm
+    context = {
+        'u_form':u_form,
+        'p_form':p_form
+    }
+
+    return render(request,"users/profile.html", context)
+

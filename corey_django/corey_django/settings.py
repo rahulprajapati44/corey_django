@@ -121,6 +121,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR,"media")  # to collect all the media file in one location from all the apps
+MEDIA_URL = '/media/'   # public url of the media directory
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,"static/")
 ]

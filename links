@@ -1,0 +1,5 @@
+Link to get settings.py variable names:
+https://docs.djangoproject.com/en/3.0/ref/settings/
+
+django signals :
+signals.py  <-- this file need to be created when we want to fire any model after saving something
